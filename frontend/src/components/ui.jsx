@@ -60,13 +60,18 @@ export function StatCard({ label, value, hint, icon, tone }) {
 
 export function Modal({ open, title, onClose, children, footer }) {
   const ref = useRef(null)
+  const onCloseRef = useRef(onClose)
+  onCloseRef.current = onClose
+  // Focus the dialog only when it opens. Depending on `onClose` (a new function on
+  // every parent render) re-ran this on each keystroke and stole focus from inputs.
   useEffect(() => {
     if (!open) return undefined
-    const onKey = (e) => e.key === 'Escape' && onClose?.()
+    const onKey = (e) => e.key === 'Escape' && onCloseRef.current?.()
     document.addEventListener('keydown', onKey)
-    ref.current?.focus()
+    const first = ref.current?.querySelector('input, select, textarea')
+    ;(first || ref.current)?.focus()
     return () => document.removeEventListener('keydown', onKey)
-  }, [open, onClose])
+  }, [open])
   if (!open) return null
   return (
     <div className="modal-backdrop" onMouseDown={(e) => e.target === e.currentTarget && onClose?.()}>

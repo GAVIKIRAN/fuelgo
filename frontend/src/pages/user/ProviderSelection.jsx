@@ -10,8 +10,10 @@ import { loadDraft } from '../../utils/draft'
 import { km, money } from '../../utils/format'
 
 export default function ProviderSelection() {
-  const draft = loadDraft()
-  const [selected, setSelected] = useState(null)
+  // Read the draft once: booking clears it, and re-reading on every render made the
+  // page redirect home (racing the navigation to the tracking screen).
+  const [draft] = useState(loadDraft)
+  const [picked, setSelected] = useState(null)
   const { submit, submitting } = useCreateRequest()
   const providers = useAsync(
     () => (draft ? requestApi.match({ ...draft.payload, vehicle_id: undefined, description: undefined, address: undefined }) : Promise.resolve(null)),
@@ -20,6 +22,8 @@ export default function ProviderSelection() {
   if (!draft) return <Navigate to="/app" replace />
 
   const items = providers.data?.items || []
+  // Best match is preselected so "Book" works without an extra tap.
+  const selected = items.some((p) => p.id === picked) ? picked : items[0]?.id ?? null
   const back = draft.kind === 'fuel' ? '/app/fuel' : '/app/mechanic'
   const loc = { lat: draft.payload.lat, lng: draft.payload.lng }
 
