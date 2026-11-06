@@ -1,0 +1,44 @@
+{
+  "best_model": "GradientBoosting",
+  "models": {
+    "LinearRegression": {
+      "MAE": 10.161,
+      "RMSE": 13.895,
+      "R2": 0.4667,
+      "train_seconds": 0.22
+    },
+    "RandomForest": {
+      "MAE": 9.01,
+      "RMSE": 12.858,
+      "R2": 0.5433,
+      "train_seconds": 1.37
+    },
+    "GradientBoosting": {
+      "MAE": 8.814,
+      "RMSE": 12.585,
+      "R2": 0.5625,
+      "train_seconds": 8.7
+    }
+  },
+  "selection_metric": "RMSE (lowest wins, MAE as tie-breaker)",
+  "trained_at": "2026-11-06T07:02:25.984971+00:00",
+  "n_rows": 15000,
+  "n_train": 12000,
+  "n_test": 3000,
+  "history_rows": 387,
+  "features": [
+    "hour",
+    "day_of_week",
+    "month",
+    "is_weekend",
+    "hour_sin",
+    "hour_cos",
+    "zone",
+    "fuel_type",
+    "weather",
+    "traffic"
+  ],
+  "target": "demand_litres",
+  "avg_order_litres": 8.06,
+  "target_mean": 15.413
+}
