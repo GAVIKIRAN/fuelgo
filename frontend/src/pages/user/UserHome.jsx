@@ -41,12 +41,22 @@ export default function UserHome() {
           <h2 style={{ color: '#fff', fontSize: '1.5rem' }}>Stranded on the road?</h2>
           <p>Tap Request Help. We'll find your location and the nearest verified provider. Fuel arrives in about 20 minutes on average.</p>
         </div>
-        <button className="sos-btn" disabled={Boolean(activeReq)}
-          onClick={() => setSos(true)} aria-label="Request emergency help">
-          <Icon name="alert" size={34} strokeWidth={2.4} />
-          SOS
-          <small>Request Help</small>
-        </button>
+        {activeReq ? (
+          // One active request at a time: SOS takes you to the help already on the way.
+          <button className="sos-btn" onClick={() => navigate(`/app/requests/${activeReq.id}`)}
+            aria-label={`You already have an active request #${activeReq.id}. Open it`}>
+            <Icon name="navigation" size={30} strokeWidth={2.4} />
+            Help is on the way
+            <small>Track request #{activeReq.id}</small>
+          </button>
+        ) : (
+          <button className="sos-btn" onClick={() => setSos(true)}
+            aria-label="Request emergency help">
+            <Icon name="alert" size={34} strokeWidth={2.4} />
+            SOS
+            <small>Request Help</small>
+          </button>
+        )}
       </div>
 
       <Modal open={sos} title="What happened?" onClose={() => setSos(false)}>

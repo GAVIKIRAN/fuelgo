@@ -77,6 +77,27 @@ run('live booking + vehicle form', () => {
     await fetch(`${API}/api/v1/requests/${active.request.id}/cancel`, { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: '{}' })
   }, 30000)
 
+  it('SOS: chooser → emergency fuel → booked; then SOS links to the active request', async () => {
+    const token = await newUser()
+    const view = renderApp('/app')
+    fireEvent.click(await screen.findByRole('button', { name: 'Request emergency help' }, { timeout: 8000 }))
+    fireEvent.click(await screen.findByRole('button', { name: /I ran out of fuel/ }))
+    await waitFor(() => expect(currentPath).toBe('/app/fuel'))
+    const send = await screen.findByRole('button', { name: /Send nearest provider now/ }, { timeout: 8000 })
+    await waitFor(() => expect(send).toBeEnabled(), { timeout: 8000 })
+    await new Promise((r) => setTimeout(r, 600))
+    fireEvent.click(send)
+    await waitFor(() => expect(currentPath).toMatch(/^\/app\/requests\/\d+$/), { timeout: 8000 })
+    const id = currentPath.split('/').pop()
+    view.unmount()
+
+    renderApp('/app')
+    const track = await screen.findByRole('button', { name: new RegExp(`active request #${id}`) }, { timeout: 8000 })
+    fireEvent.click(track)
+    await waitFor(() => expect(currentPath).toBe(`/app/requests/${id}`))
+    await fetch(`${API}/api/v1/requests/${id}/cancel`, { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: '{}' })
+  }, 40000)
+
   it('adds a vehicle by typing into the modal form', async () => {
     const token = await newUser()
     const user = userEvent.setup()

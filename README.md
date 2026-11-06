@@ -75,9 +75,9 @@ The login page has one-tap buttons for these accounts.
 
 ### Demo without two devices
 
-Open the user and provider in two browser windows (one normal, one private), or use the **Simulate drive (demo)** button on the tracking screen. It moves the provider marker to the customer over about 30 seconds with live ETA updates, then marks the request *Arrived*.
+Open the user and the provider in two browser tabs (each tab keeps its own login), or use the **Simulate drive (demo)** button on the tracking screen. It moves the provider marker to the customer over about 30 seconds with live ETA updates, then marks the request *Arrived*.
 
-Suggested walkthrough: log in as **Ravi** → *Fuel* → 5 L petrol → *Choose a provider* → book. In a private window, log in as the assigned provider (its business name is on Ravi's tracking screen; match it in the table above) → *Requests* → *Accept*. Back as Ravi → *Simulate drive*. As the provider → *Start service* → *Complete job*. As Ravi → *Pay now* → UPI `demo@okaxis` → *Rate service*. As **admin**, check the Dashboard, Requests and ML insights.
+Suggested walkthrough: log in as **Ravi** → *Fuel* → 5 L petrol → *Choose a provider* → book. In a second tab, log in as the assigned provider (its business name is on Ravi's tracking screen; match it in the table above) → *Requests* → *Accept*. Back as Ravi → *Simulate drive*. As the provider → *Start service* → *Complete job*. As Ravi → *Pay now* → UPI `demo@okaxis` → *Rate service*. As **admin**, check the Dashboard, Requests and ML insights.
 
 ---
 

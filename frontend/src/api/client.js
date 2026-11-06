@@ -3,27 +3,45 @@ import axios from 'axios'
 export const API_BASE = import.meta.env.VITE_API_URL || ''
 const TOKEN_KEY = 'fuelgo.tokens'
 
+function read(storage) {
+  try {
+    return JSON.parse(storage.getItem(TOKEN_KEY)) || null
+  } catch {
+    return null
+  }
+}
+function write(storage, value) {
+  try {
+    if (value) storage.setItem(TOKEN_KEY, JSON.stringify(value))
+    else storage.removeItem(TOKEN_KEY)
+  } catch {
+    /* storage unavailable (private mode) */
+  }
+}
+
+/**
+ * Each tab keeps its own session (sessionStorage), so a vehicle owner and a provider
+ * can be signed in side by side in two tabs. localStorage only remembers the last
+ * login so that new tabs and browser restarts start signed in.
+ */
 export const tokenStore = {
   get() {
-    try {
-      return JSON.parse(localStorage.getItem(TOKEN_KEY)) || null
-    } catch {
-      return null
-    }
+    const own = read(sessionStorage)
+    if (own) return own
+    const shared = read(localStorage)
+    if (shared) write(sessionStorage, shared) // pin this tab to the session it started with
+    return shared
   },
   set(tokens) {
-    try {
-      localStorage.setItem(TOKEN_KEY, JSON.stringify(tokens))
-    } catch {
-      /* storage unavailable (private mode) */
-    }
+    write(sessionStorage, tokens)
+    write(localStorage, tokens)
   },
   clear() {
-    try {
-      localStorage.removeItem(TOKEN_KEY)
-    } catch {
-      /* ignore */
-    }
+    const own = read(sessionStorage)
+    const shared = read(localStorage)
+    write(sessionStorage, null)
+    // only forget the remembered login if it belongs to this tab
+    if (!own || shared?.refresh_token === own.refresh_token) write(localStorage, null)
   },
 }
 
