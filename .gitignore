@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+backend/instance/
+backend/uploads/*
+!backend/uploads/.gitkeep
+backend/*.db
+backend/ml/artifacts/*.joblib
+.env
+
+# Node
+node_modules/
+frontend/dist/
+coverage/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
