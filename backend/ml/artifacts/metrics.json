@@ -2,30 +2,30 @@
   "best_model": "GradientBoosting",
   "models": {
     "LinearRegression": {
-      "MAE": 10.161,
-      "RMSE": 13.895,
-      "R2": 0.4667,
-      "train_seconds": 0.22
+      "MAE": 10.098,
+      "RMSE": 13.841,
+      "R2": 0.4682,
+      "train_seconds": 0.03
     },
     "RandomForest": {
-      "MAE": 9.01,
-      "RMSE": 12.858,
-      "R2": 0.5433,
-      "train_seconds": 1.37
+      "MAE": 8.901,
+      "RMSE": 12.81,
+      "R2": 0.5445,
+      "train_seconds": 0.73
     },
     "GradientBoosting": {
-      "MAE": 8.814,
-      "RMSE": 12.585,
-      "R2": 0.5625,
-      "train_seconds": 8.7
+      "MAE": 8.672,
+      "RMSE": 12.445,
+      "R2": 0.5701,
+      "train_seconds": 2.9
     }
   },
   "selection_metric": "RMSE (lowest wins, MAE as tie-breaker)",
-  "trained_at": "2026-11-06T07:02:25.984971+00:00",
+  "trained_at": "2026-11-06T07:43:01.060117+00:00",
   "n_rows": 15000,
   "n_train": 12000,
   "n_test": 3000,
-  "history_rows": 387,
+  "history_rows": 388,
   "features": [
     "hour",
     "day_of_week",
@@ -39,6 +39,6 @@
     "traffic"
   ],
   "target": "demand_litres",
-  "avg_order_litres": 8.06,
-  "target_mean": 15.413
+  "avg_order_litres": 8.05,
+  "target_mean": 15.489
 }

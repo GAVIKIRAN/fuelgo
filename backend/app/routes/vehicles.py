@@ -1,7 +1,7 @@
 from flask_jwt_extended import current_user
 from flask_smorest import Blueprint
 
-from ..schemas import VehicleSchema
+from ..schemas import VehicleSchema, VehicleUpdateSchema
 from ..services import vehicle_service
 from ..utils.decorators import role_required
 
@@ -24,7 +24,7 @@ def create_vehicle(data):
 
 @blp.route("/<int:vehicle_id>", methods=["PATCH"])
 @role_required("user")
-@blp.arguments(VehicleSchema(partial=True))
+@blp.arguments(VehicleUpdateSchema(partial=True))
 def update_vehicle(data, vehicle_id):
     return vehicle_service.update_vehicle(current_user, vehicle_id, data)
 

@@ -51,6 +51,10 @@ class Config:
     CORS_ORIGINS = [o.strip() for o in os.getenv(
         "CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(",") if o.strip()]
 
+    # Socket.IO authenticates with a JWT (not cookies); dev accepts any origin so the
+    # UI also works when opened via a LAN IP on a phone. Production uses CORS_ORIGINS.
+    SOCKETIO_CORS_ORIGINS = None  # None -> same as CORS_ORIGINS
+
     UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
     MAX_CONTENT_LENGTH = 8 * 1024 * 1024  # 8 MB uploads
     ALLOWED_UPLOAD_EXTENSIONS = {"png", "jpg", "jpeg", "webp", "pdf"}
@@ -94,6 +98,7 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    SOCKETIO_CORS_ORIGINS = "*"
 
 
 class ProductionConfig(Config):

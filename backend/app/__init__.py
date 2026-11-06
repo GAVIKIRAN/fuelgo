@@ -36,7 +36,7 @@ def create_app(config_name=None):
                   supports_credentials=False)
     limiter.init_app(app)
     api = Api(app)
-    socketio.init_app(app, cors_allowed_origins=app.config["CORS_ORIGINS"],
+    socketio.init_app(app, cors_allowed_origins=app.config["SOCKETIO_CORS_ORIGINS"] or app.config["CORS_ORIGINS"],
                       async_mode="threading", logger=False, engineio_logger=False)
 
     _register_jwt_handlers()

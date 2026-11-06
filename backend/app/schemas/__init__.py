@@ -84,6 +84,10 @@ class VehicleSchema(BaseSchema):
             raise ValidationError("Use an Indian registration format, e.g. KA09AB1234.")
 
 
+class VehicleUpdateSchema(VehicleSchema):
+    """Same fields as VehicleSchema; used with partial=True for PATCH."""
+
+
 # ---------- requests ----------
 class LocationSchema(BaseSchema):
     lat = fields.Float(required=True, validate=validate.Range(min=-90, max=90))

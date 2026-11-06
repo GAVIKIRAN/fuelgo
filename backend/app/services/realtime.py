@@ -37,10 +37,12 @@ def emit_to_admins(event, data):
 
 
 def broadcast_request_update(req):
-    """Push a request snapshot to everyone following it (customer, provider, admins)."""
-    payload = req.to_dict()
-    emit_to_request(req.id, "request:update", payload)
-    emit_to_user(req.user_id, "request:update", payload)
+    """Push a request snapshot to everyone following it (customer, provider, admins).
+
+    A single emit to a list of rooms delivers once per connected client even if it
+    is in several of those rooms.
+    """
+    rooms = [request_room(req.id), user_room(req.user_id), ADMIN_ROOM]
     if req.provider is not None:
-        emit_to_user(req.provider.user_id, "request:update", payload)
-    emit_to_admins("request:update", payload)
+        rooms.append(user_room(req.provider.user_id))
+    _emit("request:update", req.to_dict(), rooms)
