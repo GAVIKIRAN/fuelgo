@@ -1,0 +1,51 @@
+# FuelGo: PostgreSQL + Flask API + React (nginx).
+#   cp .env.example .env   # then set SECRET_KEY / JWT_SECRET_KEY / POSTGRES_PASSWORD
+#   docker compose up --build
+# App: http://localhost:8080   API docs: http://localhost:5000/api/docs
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: fuelgo
+      POSTGRES_USER: fuelgo
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fuelgo -d fuelgo"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      APP_ENV: production
+      DATABASE_URL: postgresql://fuelgo:${POSTGRES_PASSWORD}@db:5432/fuelgo
+      SECRET_KEY: ${SECRET_KEY:?set SECRET_KEY in .env}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?set JWT_SECRET_KEY in .env}
+      CORS_ORIGINS: http://localhost:8080
+      PAYMENT_GATEWAY: ${PAYMENT_GATEWAY:-mock}
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID:-}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET:-}
+      SIMULATOR_ENABLED: ${SIMULATOR_ENABLED:-1}
+    volumes:
+      - uploads:/app/uploads
+      - mlmodels:/app/ml/artifacts
+    ports:
+      - "5000:5000"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+volumes:
+  pgdata:
+  uploads:
+  mlmodels:
