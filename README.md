@@ -128,18 +128,23 @@ python seed.py --reset         # wipe and reseed (add --no-train to skip ML trai
 python -m ml.train             # retrain and print model comparison (MAE / RMSE / R²)
 flask db migrate -m "msg"      # after model changes
 flask db upgrade
-pytest -q                      # 69 tests
-python scripts/e2e_flow.py     # full flow against a running, freshly seeded server
+pytest -q                      # 70 tests
+python scripts/e2e_flow.py     # core journey against a running, freshly seeded server
+python scripts/e2e_full.py     # every other feature (72 checks)
 python scripts/make_postman.py # regenerate the Postman collection from OpenAPI
 
 # frontend (inside frontend/)
-npm test                       # Vitest
+npm test                       # Vitest (unit tests)
+# with the backend running, also the live UI tests:
+# LIVE_API=http://127.0.0.1:5000 VITE_API_URL=http://127.0.0.1:5000 npx vitest run
 npm run build                  # production build in dist/
 ```
 
 ---
 
 ## Features
+
+**New users:** a public landing page (services, how it works, live stats and today's fuel prices, reviews, FAQ, partner sign-up) and a **getting-started checklist** after sign-up. Owners add a vehicle, allow location, add a phone number and learn the SOS button. Partners complete their profile, upload documents, get verified and go online.
 
 **Vehicle owner:** register/login (JWT), profile and password, vehicles CRUD. Fuel requests (petrol/diesel/CNG, 1–60 L) with a live price estimate (fuel price × litres + distance-based delivery fee, night surcharge). Mechanic requests (flat tyre, battery jumpstart, engine trouble, towing, general) with description and photo. GPS location with a draggable pin, tap-to-move, reverse-geocoded address and a manual fallback. Nearby providers ranked by distance, rating and ETA, with auto-assign. **SOS / Request Help** button. Live tracking map with ETA and status timeline. UPI/card/cash payment with failure + retry and a printable receipt. Ratings and complaints. Filterable history. Notification bell with unread count. Dark mode.
 

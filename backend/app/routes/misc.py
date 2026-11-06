@@ -31,6 +31,14 @@ def pricing():
     return pricing_service.get_pricing()
 
 
+@blp.route("/stats/public", methods=["GET"])
+@blp.doc(security=[])
+def public_stats():
+    """Aggregate, non-personal platform stats for the public landing page."""
+    from ..services import admin_service
+    return admin_service.public_stats()
+
+
 # ---------- feedback & complaints
 @blp.route("/feedback", methods=["POST"])
 @role_required("user")

@@ -52,8 +52,8 @@ async function renderAt(path) {
 
 run('live smoke: every page renders with real data', () => {
   const pages = {
-    user: ['ravi@fuelgo.in', 'User@123', ['/app', '/app/fuel', '/app/mechanic', '/app/history', '/app/profile', '/app/requests/:id', '/app/requests/:id/pay', '/app/requests/:id/rate']],
-    provider: ['suresh.fuel@fuelgo.in', 'Provider@123', ['/provider', '/provider/requests', '/provider/job', '/provider/earnings', '/provider/profile']],
+    user: ['ravi@fuelgo.in', 'User@123', ['/app', '/app/welcome', '/app/fuel', '/app/mechanic', '/app/history', '/app/profile', '/app/requests/:id', '/app/requests/:id/pay', '/app/requests/:id/rate']],
+    provider: ['suresh.fuel@fuelgo.in', 'Provider@123', ['/provider', '/provider/welcome', '/provider/requests', '/provider/job', '/provider/earnings', '/provider/profile']],
     admin: ['admin@fuelgo.in', 'Admin@123', ['/admin', '/admin/users', '/admin/providers', '/admin/requests', '/admin/payments', '/admin/feedback', '/admin/pricing', '/admin/ml']],
   }
   for (const [role, [email, password, paths]] of Object.entries(pages)) {

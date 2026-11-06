@@ -28,7 +28,7 @@ export function VerificationBanner({ profile }) {
     <div className={`alert ${s === 'PENDING' ? 'alert-warn' : 'alert-error'}`}>
       <Icon name="shield" size={18} />
       <div>
-        {s === 'PENDING' && <><strong>Verification pending.</strong> Upload your documents in <Link to="/provider/profile">Profile</Link>. An admin will review them before you can go online.</>}
+        {s === 'PENDING' && <><strong>Verification pending.</strong> Follow the <Link to="/provider/welcome">getting-started steps</Link> and upload your documents. An admin will review them before you can go online.</>}
         {s === 'REJECTED' && <><strong>Verification rejected.</strong> {profile.verification_note} Upload updated documents to re-apply.</>}
         {s === 'SUSPENDED' && <><strong>Account suspended.</strong> {profile.verification_note} Contact FuelGo support.</>}
       </div>

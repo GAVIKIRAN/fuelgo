@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
+import { useRef, useState } from 'react'
+import { Link, Navigate, useSearchParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { Logo } from '../components/Layout'
 import { Field, Segmented, Spinner } from '../components/ui'
@@ -26,7 +26,9 @@ export function validateRegister(f) {
 
 export default function Register() {
   const { user, register } = useAuth()
-  const navigate = useNavigate()
+  // Where to go once signed in. Set just before registering so the redirect below
+  // sends brand-new accounts to onboarding (instead of racing a navigate() call).
+  const afterSignup = useRef(null)
   const [params] = useSearchParams()
   const [form, setForm] = useState({
     role: params.get('role') === 'provider' ? 'provider' : 'user',
@@ -38,7 +40,7 @@ export default function Register() {
   const [submitting, setSubmitting] = useState(false)
   const [serverError, setServerError] = useState('')
 
-  if (user) return <Navigate to={homePathFor(user)} replace />
+  if (user) return <Navigate to={afterSignup.current || homePathFor(user)} replace />
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value })
   const toggleFuel = (ft) => setForm({ ...form, fuel_types: form.fuel_types.includes(ft) ? form.fuel_types.filter((x) => x !== ft) : [...form.fuel_types, ft] })
 
@@ -60,10 +62,11 @@ export default function Register() {
       })
     }
     try {
-      const u = await register(payload)
+      afterSignup.current = form.role === 'provider' ? '/provider/welcome' : '/app/welcome'
+      await register(payload)
       toast.success('Account created')
-      navigate(u.role === 'provider' ? '/provider/profile' : '/app/profile?welcome=1', { replace: true })
     } catch (err) {
+      afterSignup.current = null
       setErrors(fieldErrors(err))
       setServerError(errorMessage(err))
     } finally {

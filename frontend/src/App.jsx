@@ -18,12 +18,14 @@ const Payment = lazy(() => import('./pages/user/Payment'))
 const ServiceHistory = lazy(() => import('./pages/user/ServiceHistory'))
 const RateService = lazy(() => import('./pages/user/RateService'))
 const Profile = lazy(() => import('./pages/user/Profile'))
+const Welcome = lazy(() => import('./pages/user/Welcome'))
 // provider
 const ProviderDashboard = lazy(() => import('./pages/provider/ProviderDashboard'))
 const IncomingRequests = lazy(() => import('./pages/provider/IncomingRequests'))
 const ActiveJob = lazy(() => import('./pages/provider/ActiveJob'))
 const Earnings = lazy(() => import('./pages/provider/Earnings'))
 const ProviderProfile = lazy(() => import('./pages/provider/ProviderProfile'))
+const ProviderWelcome = lazy(() => import('./pages/provider/ProviderWelcome'))
 // admin
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
 const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'))
@@ -53,6 +55,7 @@ export default function App() {
             <Route path="requests/:id/rate" element={<RateService />} />
             <Route path="history" element={<ServiceHistory />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="welcome" element={<Welcome />} />
           </Route>
         </Route>
 
@@ -63,6 +66,7 @@ export default function App() {
             <Route path="job" element={<ActiveJob />} />
             <Route path="earnings" element={<Earnings />} />
             <Route path="profile" element={<ProviderProfile />} />
+            <Route path="welcome" element={<ProviderWelcome />} />
           </Route>
         </Route>
 

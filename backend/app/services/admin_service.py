@@ -11,6 +11,43 @@ from .notification_service import notify
 from .request_service import _apply_filters
 
 
+def public_stats():
+    """Aggregate numbers safe to show anonymously on the landing page (no personal data
+    beyond a reviewer's first name)."""
+    completed = db.session.scalar(select(func.count(ServiceRequest.id))
+                                  .where(ServiceRequest.status == RequestStatus.COMPLETED))
+    verified = dict(db.session.execute(
+        select(Provider.provider_type, func.count(Provider.id))
+        .where(Provider.is_verified.is_(True)).group_by(Provider.provider_type)).all())
+    online = db.session.scalar(select(func.count(Provider.id)).where(
+        Provider.is_verified.is_(True), Provider.is_available.is_(True)))
+    avg_rating = db.session.scalar(select(func.avg(Feedback.rating)))
+    rating_count = db.session.scalar(select(func.count(Feedback.id)))
+    arrivals = db.session.execute(select(ServiceRequest.accepted_at, ServiceRequest.arrived_at).where(
+        ServiceRequest.accepted_at.is_not(None), ServiceRequest.arrived_at.is_not(None))
+        .order_by(ServiceRequest.arrived_at.desc()).limit(500)).all()
+    minutes = [(b - a).total_seconds() / 60 for a, b in arrivals if b > a]
+    zones = db.session.scalar(select(func.count(func.distinct(ServiceRequest.zone))))
+    reviews = db.session.scalars(select(Feedback).where(
+        Feedback.rating >= 4, Feedback.comment.is_not(None))
+        .order_by(Feedback.created_at.desc()).limit(3))
+    return {
+        "completed_requests": completed,
+        "fuel_partners": verified.get("fuel", 0),
+        "mechanic_partners": verified.get("mechanic", 0),
+        "partners_online": online,
+        "avg_rating": round(float(avg_rating), 1) if avg_rating else None,
+        "rating_count": rating_count,
+        "avg_arrival_minutes": round(sum(minutes) / len(minutes)) if minutes else None,
+        "zones_served": zones,
+        "reviews": [{"rating": f.rating, "comment": f.comment,
+                     "name": (f.user.name.split()[0] if f.user else "Customer"),
+                     "service": f.request.service_type if f.request else None,
+                     "provider": f.provider.business_name if f.provider else None}
+                    for f in reviews],
+    }
+
+
 def dashboard():
     count = lambda model, *where: db.session.scalar(select(func.count(model.id)).where(*where))
     by_status = dict(db.session.execute(

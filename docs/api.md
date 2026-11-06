@@ -101,6 +101,7 @@ Mock gateway test data: UPI `demo@okaxis` succeeds and `fail@okaxis` is declined
 | POST | `/notifications/read-all` | A | Mark all read |
 | GET | `/pricing` | P | Fuel prices + fee config |
 | GET | `/meta` | P | Zones, fuel types, problem categories |
+| GET | `/stats/public` | P | Anonymous aggregate stats for the landing page (completed rescues, partners, rating, average arrival, recent reviews by first name) |
 | GET | `/health` | P | Liveness |
 
 ### Admin

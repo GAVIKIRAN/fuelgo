@@ -908,6 +908,29 @@
               "type": "noauth"
             }
           }
+        },
+        {
+          "name": "GET /stats/public",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/stats/public",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "stats",
+                "public"
+              ]
+            },
+            "description": "Aggregate, non-personal platform stats for the public landing page.",
+            "auth": {
+              "type": "noauth"
+            }
+          }
         }
       ]
     },

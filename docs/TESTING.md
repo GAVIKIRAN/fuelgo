@@ -2,10 +2,12 @@
 
 | Suite | Tool | Command | Result (2026-11-06) |
 |---|---|---|---|
-| Backend unit + API tests | pytest | `cd backend && pytest` | **69 passed** (~12 s) |
-| Frontend unit / component tests | Vitest + Testing Library | `cd frontend && npm test` | **20 passed** |
-| End-to-end flow (live server, HTTP + Socket.IO) | `scripts/e2e_flow.py` | see below | **30/30 checks passed** |
-| Live page smoke test (every page × role, real API) | Vitest (opt-in) | see below | **3 passed** (21 pages) |
+| Backend unit + API tests | pytest | `cd backend && pytest` | **70 passed** (~12 s) |
+| Frontend unit / component tests | Vitest + Testing Library | `cd frontend && npm test` | **24 passed** |
+| End-to-end core journey (live server, HTTP + Socket.IO) | `scripts/e2e_flow.py` | see below | **30/30 checks passed** |
+| End-to-end feature suite (live server) | `scripts/e2e_full.py` | see below | **72/72 checks passed** |
+| Live UI tests (landing, onboarding, booking, SOS, vehicle form) | Vitest (opt-in, real API) | see below | **7 passed** |
+| Live page smoke test (every page × role, real API) | Vitest (opt-in) | see below | **3 passed** (23 pages) |
 | Production build | Vite | `npm run build` | passes |
 
 Environment: Windows 11, Python 3.14, Node 24, SQLite. PostgreSQL and Docker were not available on the build machine, so the Postgres/Docker path is configured but was not run there.
@@ -23,10 +25,11 @@ cd frontend && npm test
 cd backend && python seed.py --reset && flask run          # terminal 1
 pip install "python-socketio[client]" requests
 python scripts/e2e_flow.py                                 # terminal 2
+python scripts/e2e_full.py                                 # every other feature
 
-# live smoke render of every page (backend running)
+# live UI tests + smoke render of every page (backend running)
 cd frontend
-LIVE_API=http://127.0.0.1:5000 VITE_API_URL=http://127.0.0.1:5000 npx vitest run smoke
+LIVE_API=http://127.0.0.1:5000 VITE_API_URL=http://127.0.0.1:5000 npx vitest run
 ```
 
 ## Backend test cases (pytest)
@@ -103,6 +106,44 @@ LIVE_API=http://127.0.0.1:5000 VITE_API_URL=http://127.0.0.1:5000 npx vitest run
 Register user → add vehicle → estimate → match (3 providers ranked) → book with auto-assign → assigned provider sees it → double booking blocked → provider accepts → Socket.IO join → simulator streams **20 `tracking:update` events, ETA 8 → 0 min** → `ARRIVED` pushed → IN_PROGRESS → COMPLETED → UPI `fail@okaxis` declined (402) → retry `demo@okaxis` succeeds → receipt → 5-star rating → notifications delivered → new mechanic registers → can't go online unverified → admin verifies → goes online → ML predict-demand and insights → admin dashboard. **30/30 checks passed.**
 
 Also verified manually against the running server: Swagger UI at `/api/docs` (66 paths), the auth rate limit returns 429 after 20 attempts per minute, Socket.IO over both WebSocket and polling through the Vite proxy, and connections with an invalid token are refused.
+
+## Feature suite (scripts/e2e_full.py) – 72 checks
+
+| Area | What is verified |
+|---|---|
+| Landing data | public stats without login (no emails leaked), public pricing, zones, health, Swagger page |
+| Mechanic flow | category-based estimate, booking, photo upload + serving, assigned mechanic sees it, **decline → auto-reassigned to a different mechanic**, customer notified, REST location fallback updates tracking, can't go offline mid-job, final price adjustment |
+| Payments | cash (customer can't self-confirm, provider confirms), earnings, card decline (402) → retry success, already-paid guard, payment history, admin refund + notification |
+| Feedback | rating, duplicate blocked, provider sees rating, complaint → admin resolves → customer sees resolution |
+| Requests | cancel pending, provider can't accept cancelled, can't pay cancelled, history filter, other users get 404, fuel/vehicle mismatch, no providers far away |
+| Vehicles | add, edit, delete |
+| Partner onboarding | admins notified, document upload, admin/customer access control, bad file type 415, pending filter, reject with note, re-upload → pending, verify → online, suspend → forced offline, suspended can't go online |
+| Admin | block user (token + login rejected) / unblock, pricing change reflected in estimates (and reverted), non-admin blocked, request/feedback/payment filters, dashboard KPIs |
+| ML | retrain, insights (forecast, heatmap, zones), `/api/admin/ml` alias, users forbidden |
+| Auth | refresh token, validation error format |
+
+## Live UI tests (Vitest against the running API)
+
+| Test | Result |
+|---|---|
+| Landing page shows live stats, today's fuel prices, both services, reviews, FAQ, correct sign-up and partner links | Pass |
+| New vehicle owner registers → lands on **/app/welcome** → adds vehicle, allows location, saves phone, acknowledges SOS → 4 of 4 → home | Pass |
+| New partner registers → lands on **/provider/welcome** → profile step done, verification PENDING, "Go online" disabled | Pass |
+| Book fuel from provider selection → tracking page | Pass |
+| Book fuel with auto-assign from the fuel form | Pass |
+| SOS → "I ran out of fuel" → nearest provider → tracking; SOS then links to the active request | Pass |
+| Add a vehicle by typing into the modal form | Pass |
+
+## Bugs found by these tests and fixed
+
+| Bug | Fix |
+|---|---|
+| Vehicle form lost focus after every keystroke | Modal now focuses only when opened |
+| Booking from provider selection created the request but redirected to home | Draft read once; best match preselected |
+| SOS disabled silently while a request was active / while loading | SOS shows "Help is on the way" and opens the request |
+| Logging in as a provider in another tab broke the owner's tab (403s) | Per-tab sessions |
+| After sign-up, new users skipped the welcome page | Post-signup redirect targets onboarding |
+| Requests went to one partner but the demo login was a different one | Tracking screen names the partner and its demo login |
 
 ## ML evaluation (seeded data, `python -m ml.train`)
 

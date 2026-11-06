@@ -121,3 +121,18 @@ def test_admin_request_monitor_filters(client, auth, completed):
     assert res["pagination"]["total"] == 1
     res = client.get("/api/v1/admin/requests?status=PENDING", headers=ah).get_json()
     assert res["pagination"]["total"] == 0
+
+
+def test_public_stats_is_anonymous_and_aggregate(client, auth, completed):
+    client.post("/api/v1/feedback", headers=auth("cust@test.in"),
+                json={"request_id": completed, "rating": 5, "comment": "Quick and polite"})
+    res = client.get("/api/v1/stats/public")  # no auth header
+    assert res.status_code == 200
+    body = res.get_json()
+    assert body["completed_requests"] == 1
+    assert body["fuel_partners"] == 2 and body["mechanic_partners"] == 1
+    assert body["avg_rating"] == 5.0
+    review = body["reviews"][0]
+    assert review == {"rating": 5, "comment": "Quick and polite", "name": "Customer",
+                      "service": "fuel", "provider": "NearFuel Services"}
+    assert "email" not in str(body)

@@ -86,7 +86,7 @@ export default function UserHome() {
 
       {vehicles.data && vehicles.data.items.length === 0 && (
         <div className="alert alert-info">
-          <Icon name="car" size={18} /> Add your vehicle in <Link to="/app/profile">Profile</Link> so requests are faster and the right fuel is pre-selected.
+          <Icon name="car" size={18} /> <span>New here? <Link to="/app/welcome">Finish setting up</Link>: add your vehicle so requests are faster and the right fuel is pre-selected.</span>
         </div>
       )}
 
