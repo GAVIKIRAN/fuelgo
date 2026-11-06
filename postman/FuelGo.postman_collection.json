@@ -1,0 +1,1898 @@
+{
+  "info": {
+    "name": "FuelGo API",
+    "_postman_id": "6f0e0d2c-fuel-go-api-collection",
+    "description": "FuelGo REST API v1. Run 'POST /auth/login' first; the token is stored automatically.\nDemo logins: ravi@fuelgo.in / User@123, suresh.fuel@fuelgo.in / Provider@123, admin@fuelgo.in / Admin@123.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:5000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "refresh_token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "admin",
+      "item": [
+        {
+          "name": "GET /admin/complaints",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/complaints",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "complaints"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "PATCH /admin/complaints/{complaint_id}/resolve",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/complaints/:complaint_id/resolve",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "complaints",
+                ":complaint_id",
+                "resolve"
+              ],
+              "variable": [
+                {
+                  "key": "complaint_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resolution_note\": \"Refunded delivery fee\"\n}"
+            }
+          }
+        },
+        {
+          "name": "GET /admin/dashboard",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/dashboard",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "dashboard"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET /admin/feedback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/feedback",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "feedback"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET /admin/payments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/payments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "payments"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "PATCH /admin/payments/{payment_id}/refund",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/payments/:payment_id/refund",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "payments",
+                ":payment_id",
+                "refund"
+              ],
+              "variable": [
+                {
+                  "key": "payment_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refund_requested\": true,\n  \"refund_note\": \"Late\"\n}"
+            }
+          }
+        },
+        {
+          "name": "GET /admin/pricing",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/pricing",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "pricing"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "PUT /admin/pricing",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/pricing",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "pricing"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fuel_prices\": [\n    {\n      \"fuel_type\": \"petrol\",\n      \"price_per_litre\": 103.1\n    }\n  ],\n  \"config\": {\n    \"fuel_base_delivery_fee\": 49\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "GET /admin/providers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/providers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "providers"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "PATCH /admin/providers/{provider_id}/verification",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/providers/:provider_id/verification",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "providers",
+                ":provider_id",
+                "verification"
+              ],
+              "variable": [
+                {
+                  "key": "provider_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Verify, reject or suspend a provider.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"VERIFIED\",\n  \"note\": \"Documents OK\"\n}"
+            }
+          }
+        },
+        {
+          "name": "GET /admin/requests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "requests"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "POST /admin/requests/{request_id}/cancel",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/requests/:request_id/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "requests",
+                ":request_id",
+                "cancel"
+              ],
+              "variable": [
+                {
+                  "key": "request_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET /admin/users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "users"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "DELETE /admin/users/{user_id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/users/:user_id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "users",
+                ":user_id"
+              ],
+              "variable": [
+                {
+                  "key": "user_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "PATCH /admin/users/{user_id}/status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/users/:user_id/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "users",
+                ":user_id",
+                "status"
+              ],
+              "variable": [
+                {
+                  "key": "user_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Block / unblock a user.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_active\": false\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ml",
+      "item": [
+        {
+          "name": "GET /admin/ml/insights",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/ml/insights",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "ml",
+                "insights"
+              ]
+            },
+            "description": "Peak hours, top zones and a 7-day forecast."
+          }
+        },
+        {
+          "name": "GET /admin/ml/metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/ml/metrics",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "ml",
+                "metrics"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET /admin/ml/predict-demand",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/ml/predict-demand?date=2026-12-01&zone=Vijayanagar&fuel_type=petrol&weather=clear",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "ml",
+                "predict-demand"
+              ],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2026-12-01"
+                },
+                {
+                  "key": "zone",
+                  "value": "Vijayanagar"
+                },
+                {
+                  "key": "fuel_type",
+                  "value": "petrol"
+                },
+                {
+                  "key": "weather",
+                  "value": "clear"
+                }
+              ]
+            },
+            "description": "Hourly fuel demand forecast for a date, zone and fuel type."
+          }
+        },
+        {
+          "name": "POST /admin/ml/retrain",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/admin/ml/retrain",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "admin",
+                "ml",
+                "retrain"
+              ]
+            },
+            "description": "Retrain all candidate models on the latest data and keep the best."
+          }
+        }
+      ]
+    },
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "POST /auth/login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Log in and receive access + refresh tokens.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ravi@fuelgo.in\",\n  \"password\": \"User@123\"\n}"
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.access_token) { pm.collectionVariables.set('token', data.access_token); }",
+                  "if (data.refresh_token) { pm.collectionVariables.set('refresh_token', data.refresh_token); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /auth/me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "me"
+              ]
+            },
+            "description": "Current user profile."
+          }
+        },
+        {
+          "name": "PATCH /auth/me",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "me"
+              ]
+            },
+            "description": "Edit profile / change password."
+          }
+        },
+        {
+          "name": "POST /auth/refresh",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "refresh"
+              ]
+            },
+            "description": "Exchange a refresh token (Authorization: Bearer <refresh>) for a new access token.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{refresh_token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /auth/register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Register a vehicle owner or a service provider.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test.user@fuelgo.in\",\n  \"phone\": \"9876500000\",\n  \"password\": \"Test@1234\"\n}"
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.access_token) { pm.collectionVariables.set('token', data.access_token); }",
+                  "if (data.refresh_token) { pm.collectionVariables.set('refresh_token', data.refresh_token); }"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "general",
+      "item": [
+        {
+          "name": "POST /complaints",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/complaints",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "complaints"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_id\": 1,\n  \"subject\": \"Late arrival\",\n  \"description\": \"Provider arrived 30 minutes late\"\n}"
+            }
+          }
+        },
+        {
+          "name": "GET /complaints",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/complaints",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "complaints"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "POST /feedback",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/feedback",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "feedback"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_id\": 1,\n  \"rating\": 5,\n  \"comment\": \"Great service\"\n}"
+            }
+          }
+        },
+        {
+          "name": "GET /health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "health"
+              ]
+            },
+            "description": "",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        },
+        {
+          "name": "GET /meta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/meta",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "meta"
+              ]
+            },
+            "description": "Enumerations used by the UI (zones, fuel types, problem categories).",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        },
+        {
+          "name": "GET /notifications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "POST /notifications/read-all",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/read-all",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                "read-all"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "PATCH /notifications/{notification_id}/read",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/:notification_id/read",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "notifications",
+                ":notification_id",
+                "read"
+              ],
+              "variable": [
+                {
+                  "key": "notification_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET /pricing",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/pricing",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "pricing"
+              ]
+            },
+            "description": "",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "files",
+      "item": [
+        {
+          "name": "GET /documents/{doc_id}/file",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/documents/:doc_id/file",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "documents",
+                ":doc_id",
+                "file"
+              ],
+              "variable": [
+                {
+                  "key": "doc_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Download a provider document (owner or admin only)."
+          }
+        },
+        {
+          "name": "GET /uploads/requests/{filename}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/uploads/requests/:filename",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "uploads",
+                "requests",
+                ":filename"
+              ],
+              "variable": [
+                {
+                  "key": "filename",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Public (unguessable) URL for request photos so they can be shown in <img> tags.",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "payments",
+      "item": [
+        {
+          "name": "GET /payments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payments"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET /payments/config",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payments/config",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payments",
+                "config"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "POST /payments/initiate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payments/initiate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payments",
+                "initiate"
+              ]
+            },
+            "description": "Create (or reuse) a pending payment for a completed request.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"request_id\": 1,\n  \"method\": \"UPI\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST /payments/{payment_id}/confirm",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payments/:payment_id/confirm",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payments",
+                ":payment_id",
+                "confirm"
+              ],
+              "variable": [
+                {
+                  "key": "payment_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Complete a UPI/card payment. Returns 402 PAYMENT_FAILED when declined.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"upi_id\": \"demo@okaxis\"\n}"
+            }
+          }
+        },
+        {
+          "name": "GET /payments/{payment_id}/receipt",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payments/:payment_id/receipt",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "payments",
+                ":payment_id",
+                "receipt"
+              ],
+              "variable": [
+                {
+                  "key": "payment_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": ""
+          }
+        }
+      ]
+    },
+    {
+      "name": "provider",
+      "item": [
+        {
+          "name": "PATCH /provider/availability",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/provider/availability",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "provider",
+                "availability"
+              ]
+            },
+            "description": "Go online / offline (optionally with current GPS position).",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_available\": true,\n  \"lat\": 12.3285,\n  \"lng\": 76.6145\n}"
+            }
+          }
+        },
+        {
+          "name": "POST /provider/documents",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/provider/documents",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "provider",
+                "documents"
+              ]
+            },
+            "description": "Upload a verification document (multipart: `file`, `doc_type`).",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                },
+                {
+                  "key": "doc_type",
+                  "value": "driving_license",
+                  "type": "text"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "DELETE /provider/documents/{doc_id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/provider/documents/:doc_id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "provider",
+                "documents",
+                ":doc_id"
+              ],
+              "variable": [
+                {
+                  "key": "doc_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET /provider/earnings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/provider/earnings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "provider",
+                "earnings"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "POST /provider/location",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/provider/location",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "provider",
+                "location"
+              ]
+            },
+            "description": "REST fallback for live location updates (Socket.IO event `provider:location`).",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 12.33,\n  \"lng\": 76.63\n}"
+            }
+          }
+        },
+        {
+          "name": "GET /provider/profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/provider/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "provider",
+                "profile"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "PATCH /provider/profile",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/provider/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "provider",
+                "profile"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET /provider/ratings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/provider/ratings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "provider",
+                "ratings"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET /provider/requests/active",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/provider/requests/active",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "provider",
+                "requests",
+                "active"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET /provider/requests/history",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/provider/requests/history",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "provider",
+                "requests",
+                "history"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "GET /provider/requests/incoming",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/provider/requests/incoming",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "provider",
+                "requests",
+                "incoming"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "POST /provider/requests/{request_id}/accept",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/provider/requests/:request_id/accept",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "provider",
+                "requests",
+                ":request_id",
+                "accept"
+              ],
+              "variable": [
+                {
+                  "key": "request_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "POST /provider/requests/{request_id}/cash-received",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/provider/requests/:request_id/cash-received",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "provider",
+                "requests",
+                ":request_id",
+                "cash-received"
+              ],
+              "variable": [
+                {
+                  "key": "request_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "POST /provider/requests/{request_id}/reject",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/provider/requests/:request_id/reject",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "provider",
+                "requests",
+                ":request_id",
+                "reject"
+              ],
+              "variable": [
+                {
+                  "key": "request_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Decline a request; it is auto-reassigned to the next nearest provider.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Too far away\"\n}"
+            }
+          }
+        },
+        {
+          "name": "PATCH /provider/requests/{request_id}/status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/provider/requests/:request_id/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "provider",
+                "requests",
+                ":request_id",
+                "status"
+              ],
+              "variable": [
+                {
+                  "key": "request_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Advance the lifecycle; set `final_price` when completing.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"EN_ROUTE\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "requests",
+      "item": [
+        {
+          "name": "POST /requests",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "requests"
+              ]
+            },
+            "description": "Book a service (pick a provider or auto-assign).",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"service_type\": \"fuel\",\n  \"fuel_type\": \"petrol\",\n  \"quantity_litres\": 5,\n  \"lat\": 12.332,\n  \"lng\": 76.636,\n  \"address\": \"Gokulam 3rd stage\",\n  \"auto_assign\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "GET /requests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "requests"
+              ]
+            },
+            "description": "Service history of the current user with filters and pagination."
+          }
+        },
+        {
+          "name": "GET /requests/active",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/requests/active",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "requests",
+                "active"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "POST /requests/estimate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/requests/estimate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "requests",
+                "estimate"
+              ]
+            },
+            "description": "Price estimate: fuel price × litres + distance-based delivery fee.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"service_type\": \"fuel\",\n  \"fuel_type\": \"petrol\",\n  \"quantity_litres\": 5,\n  \"lat\": 12.332,\n  \"lng\": 76.636\n}"
+            }
+          }
+        },
+        {
+          "name": "POST /requests/match",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/requests/match",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "requests",
+                "match"
+              ]
+            },
+            "description": "Nearby verified, available providers ranked by distance, rating and ETA.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"service_type\": \"fuel\",\n  \"fuel_type\": \"petrol\",\n  \"quantity_litres\": 5,\n  \"lat\": 12.332,\n  \"lng\": 76.636\n}"
+            }
+          }
+        },
+        {
+          "name": "GET /requests/{request_id}",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/requests/:request_id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "requests",
+                ":request_id"
+              ],
+              "variable": [
+                {
+                  "key": "request_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "POST /requests/{request_id}/cancel",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/requests/:request_id/cancel",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "requests",
+                ":request_id",
+                "cancel"
+              ],
+              "variable": [
+                {
+                  "key": "request_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Vehicle started\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST /requests/{request_id}/photo",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/requests/:request_id/photo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "requests",
+                ":request_id",
+                "photo"
+              ],
+              "variable": [
+                {
+                  "key": "request_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Attach a photo of the problem (multipart field `photo`).",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "photo",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /requests/{request_id}/simulate",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/requests/:request_id/simulate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "requests",
+                ":request_id",
+                "simulate"
+              ],
+              "variable": [
+                {
+                  "key": "request_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Demo: drive the provider to the customer automatically."
+          }
+        },
+        {
+          "name": "GET /requests/{request_id}/tracking",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/requests/:request_id/tracking",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "requests",
+                ":request_id",
+                "tracking"
+              ],
+              "variable": [
+                {
+                  "key": "request_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Current provider position and ETA (polling fallback for Socket.IO)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "vehicles",
+      "item": [
+        {
+          "name": "GET /vehicles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/vehicles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "vehicles"
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "POST /vehicles",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/vehicles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "vehicles"
+              ]
+            },
+            "description": "",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"make\": \"Honda\",\n  \"model\": \"City\",\n  \"registration_number\": \"KA09XY4321\",\n  \"fuel_type\": \"petrol\"\n}"
+            }
+          }
+        },
+        {
+          "name": "PATCH /vehicles/{vehicle_id}",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/vehicles/:vehicle_id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "vehicles",
+                ":vehicle_id"
+              ],
+              "variable": [
+                {
+                  "key": "vehicle_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": ""
+          }
+        },
+        {
+          "name": "DELETE /vehicles/{vehicle_id}",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/vehicles/:vehicle_id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "vehicles",
+                ":vehicle_id"
+              ],
+              "variable": [
+                {
+                  "key": "vehicle_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": ""
+          }
+        }
+      ]
+    }
+  ]
+}
