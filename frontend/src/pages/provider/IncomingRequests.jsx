@@ -67,7 +67,9 @@ export default function IncomingRequests() {
       {list.loading ? <Loading /> : list.error ? <ErrorState message={list.error} onRetry={list.reload} /> : list.data.items.length === 0 ? (
         <div className="card">
           <EmptyState icon="list" title="No pending requests"
-            text={me && !me.is_available ? 'You are offline. Go online from the dashboard to receive requests.' : 'New requests near you appear here in real time.'} />
+            text={me && !me.is_available
+              ? 'You are offline. Go online from the dashboard to receive requests.'
+              : `Each request is offered to the single best-matched ${me?.provider_type === 'fuel' ? 'fuel partner' : 'mechanic'} (nearest, best rated, free). New ones for you appear here instantly. Your service radius is ${me?.service_radius_km ?? '—'} km around your last location.`} />
         </div>
       ) : (
         <div className="stack">

@@ -6,12 +6,27 @@ import { Field, Spinner } from '../components/ui'
 import { homePathFor, useAuth } from '../context/AuthContext'
 import { errorMessage } from '../api/client'
 
+// Seeded demo accounts. Each request is offered to ONE best-matched partner, so the
+// list shows every partner by business name: sign in as the one named on the
+// customer's tracking screen.
 export const DEMO_ACCOUNTS = [
-  { label: 'Vehicle owner', email: 'ravi@fuelgo.in', password: 'User@123' },
-  { label: 'Fuel partner', email: 'suresh.fuel@fuelgo.in', password: 'Provider@123' },
-  { label: 'Mechanic partner', email: 'manju.mech@fuelgo.in', password: 'Provider@123' },
+  { label: 'Vehicle owner (Ravi)', email: 'ravi@fuelgo.in', password: 'User@123' },
   { label: 'Admin', email: 'admin@fuelgo.in', password: 'Admin@123' },
 ]
+export const DEMO_PARTNERS = [
+  { label: 'Chamundi Fuel Express', kind: 'Fuel', email: 'suresh.fuel@fuelgo.in' },
+  { label: 'Mysuru Doorstep Diesel', kind: 'Fuel', email: 'lakshmi.fuel@fuelgo.in' },
+  { label: 'GreenGas CNG Mobile', kind: 'Fuel', email: 'arjun.fuel@fuelgo.in' },
+  { label: 'Manju Auto Works', kind: 'Mechanic', email: 'manju.mech@fuelgo.in' },
+  { label: 'QuickFix Roadside', kind: 'Mechanic', email: 'fathima.mech@fuelgo.in' },
+  { label: 'Venky Towing & Repairs', kind: 'Mechanic', email: 'venky.mech@fuelgo.in' },
+  { label: 'Devaraja Garage On-Call', kind: 'Mechanic', email: 'naveen.mech@fuelgo.in' },
+].map((p) => ({ ...p, password: 'Provider@123' }))
+
+/** Demo login email for a seeded provider business name (null for real partners). */
+export function demoEmailFor(businessName) {
+  return DEMO_PARTNERS.find((p) => p.label === businessName)?.email || null
+}
 
 export function validateLogin({ email, password }) {
   const errors = {}
@@ -86,6 +101,14 @@ export default function Login() {
               <button key={a.email} type="button" className="btn btn-secondary btn-sm" disabled={submitting}
                 onClick={() => { setForm(a); submit(null, a) }}>
                 {a.label} <span className="muted" style={{ marginLeft: 'auto' }}>{a.email}</span>
+              </button>
+            ))}
+            <strong style={{ marginTop: 8 }}>Partners</strong>
+            <span className="muted small">A request goes to the one best-matched partner. Sign in as the partner named on the customer's tracking screen.</span>
+            {DEMO_PARTNERS.map((a) => (
+              <button key={a.email} type="button" className="btn btn-secondary btn-sm" disabled={submitting}
+                onClick={() => { setForm(a); submit(null, a) }}>
+                {a.label} <span className="muted" style={{ marginLeft: 'auto' }}>{a.kind}</span>
               </button>
             ))}
           </div>

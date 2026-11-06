@@ -6,6 +6,7 @@ import { TrackingMap } from '../../components/Maps'
 import StatusTimeline from '../../components/StatusTimeline'
 import { ErrorState, Field, Loading, Modal, PriceBreakdown, Spinner, StarRating, StatusBadge } from '../../components/ui'
 import { requestApi } from '../../api'
+import { demoEmailFor } from '../Login'
 import { errorMessage } from '../../api/client'
 import { useLiveRequest } from '../../hooks/useLiveRequest'
 import { STATUS_LABELS, dateTime, km, money, serviceTitle } from '../../utils/format'
@@ -105,7 +106,12 @@ export default function LiveTracking() {
           <div className="card">
             {request.status === 'PENDING' && (
               <div className="row" style={{ marginBottom: 10 }}>
-                <Spinner size={18} /> <strong>Waiting for {provider?.business_name} to accept…</strong>
+                <Spinner size={18} /> <strong>Offered to {provider?.business_name}. Waiting for them to accept…</strong>
+              </div>
+            )}
+            {request.status === 'PENDING' && demoEmailFor(provider?.business_name) && (
+              <div className="test-hints">
+                <strong>Demo:</strong> to accept this, sign in (e.g. in a private window) as <code>{demoEmailFor(provider.business_name)}</code> / <code>Provider@123</code> and open <em>Requests</em>.
               </div>
             )}
             {['ACCEPTED', 'EN_ROUTE'].includes(request.status) && (
