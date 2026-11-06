@@ -5,6 +5,7 @@ import { Logo } from '../components/Layout'
 import { Field, Segmented, Spinner } from '../components/ui'
 import { homePathFor, useAuth } from '../context/AuthContext'
 import { errorMessage, fieldErrors } from '../api/client'
+import { requestNotificationPermission } from '../platform'
 
 const ZONES = ['Vijayanagar', 'Kuvempunagar', 'Gokulam', 'Jayalakshmipuram', 'Nazarbad', 'Saraswathipuram',
   'Hebbal', 'Bannimantap', 'Chamundipuram', 'Devaraja Mohalla']
@@ -64,6 +65,7 @@ export default function Register() {
     try {
       afterSignup.current = form.role === 'provider' ? '/provider/welcome' : '/app/welcome'
       await register(payload)
+      requestNotificationPermission()
       toast.success('Account created')
     } catch (err) {
       afterSignup.current = null

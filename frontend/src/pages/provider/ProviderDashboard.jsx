@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import Icon from '../../components/Icon'
+import { getPosition } from '../../platform'
 import { Loading, StatCard, StatusBadge } from '../../components/ui'
 import { providerApi } from '../../api'
 import { errorMessage } from '../../api/client'
@@ -11,14 +12,7 @@ import { useAsync } from '../../hooks/useAsync'
 import { km, money, serviceTitle, timeAgo } from '../../utils/format'
 
 function currentPosition() {
-  return new Promise((resolve) => {
-    if (!('geolocation' in navigator)) return resolve(null)
-    navigator.geolocation.getCurrentPosition(
-      (p) => resolve({ lat: p.coords.latitude, lng: p.coords.longitude }),
-      () => resolve(null),
-      { enableHighAccuracy: true, timeout: 8000 },
-    )
-  })
+  return getPosition({ timeout: 8000 }).catch(() => null)
 }
 
 export function VerificationBanner({ profile }) {

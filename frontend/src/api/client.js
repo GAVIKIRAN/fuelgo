@@ -1,6 +1,8 @@
 import axios from 'axios'
+import { getServerUrl } from '../platform'
 
-export const API_BASE = import.meta.env.VITE_API_URL || ''
+/** Backend origin ('' on web = same origin via the dev proxy / nginx). */
+export const apiBase = () => getServerUrl()
 const TOKEN_KEY = 'fuelgo.tokens'
 
 function read(storage) {
@@ -45,9 +47,10 @@ export const tokenStore = {
   },
 }
 
-const api = axios.create({ baseURL: `${API_BASE}/api/v1`, timeout: 30000 })
+const api = axios.create({ baseURL: '/api/v1', timeout: 30000 })
 
 api.interceptors.request.use((config) => {
+  config.baseURL = `${apiBase()}/api/v1` // server address can change at runtime (Android app)
   const tokens = tokenStore.get()
   if (tokens?.access_token && !config.headers.Authorization) {
     config.headers.Authorization = `Bearer ${tokens.access_token}`
@@ -64,7 +67,7 @@ export function setLogoutHandler(fn) {
 async function refreshAccessToken() {
   const tokens = tokenStore.get()
   if (!tokens?.refresh_token) throw new Error('no refresh token')
-  const { data } = await axios.post(`${API_BASE}/api/v1/auth/refresh`, null, {
+  const { data } = await axios.post(`${apiBase()}/api/v1/auth/refresh`, null, {
     headers: { Authorization: `Bearer ${tokens.refresh_token}` },
   })
   tokenStore.set({ ...tokens, access_token: data.access_token })

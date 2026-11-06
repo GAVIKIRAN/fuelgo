@@ -5,6 +5,8 @@ import { Logo } from '../components/Layout'
 import { Field, Spinner } from '../components/ui'
 import { homePathFor, useAuth } from '../context/AuthContext'
 import { errorMessage } from '../api/client'
+import { getServerUrl, isNative, requestNotificationPermission } from '../platform'
+import ServerSetup from './ServerSetup'
 
 // Seeded demo accounts. Each request is offered to ONE best-matched partner, so the
 // list shows every partner by business name: sign in as the one named on the
@@ -44,8 +46,11 @@ export default function Login() {
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
   const [serverError, setServerError] = useState('')
+  const [editServer, setEditServer] = useState(false)
 
   if (user) return <Navigate to={homePathFor(user)} replace />
+  // Changing the server reloads the app so every connection uses the new address.
+  if (editServer) return <ServerSetup onDone={() => window.location.reload()} onCancel={() => setEditServer(false)} />
 
   const submit = async (e, creds = form) => {
     e?.preventDefault()
@@ -56,6 +61,7 @@ export default function Login() {
     setServerError('')
     try {
       const u = await login(creds.email.trim(), creds.password)
+      requestNotificationPermission()
       toast.success(`Welcome back, ${u.name.split(' ')[0]}`)
       const from = location.state?.from
       navigate(from && from.startsWith(homePathFor(u)) ? from : homePathFor(u), { replace: true })
@@ -80,6 +86,9 @@ export default function Login() {
         <div className="auth-card">
           <h1>Log in</h1>
           <p className="muted">New here? <Link to="/register">Create an account</Link></p>
+          {isNative && (
+            <p className="small muted">Server: <code>{getServerUrl()}</code> · <button type="button" className="link-btn" onClick={() => setEditServer(true)}>Change</button></p>
+          )}
           {serverError && <div className="alert alert-error" role="alert">{serverError}</div>}
           <form onSubmit={submit} noValidate>
             <Field label="Email" error={errors.email}>

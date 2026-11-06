@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import Icon from '../../components/Icon'
+import { assetUrl } from '../../platform'
 import { TrackingMap } from '../../components/Maps'
 import StatusTimeline from '../../components/StatusTimeline'
 import { EmptyState, Field, Loading, Modal, PageHeader, PriceBreakdown, Spinner, StatusBadge } from '../../components/ui'
@@ -133,7 +134,7 @@ function JobView({ jobId, onFinished }) {
               {job.vehicle && <div className="receipt-row"><span>Vehicle</span><span>{job.vehicle.make} {job.vehicle.model} · {job.vehicle.registration_number}</span></div>}
               {job.description && <div className="receipt-row"><span>Problem</span><span>{job.description}</span></div>}
             </div>
-            {job.photo_url && <img src={job.photo_url} alt="Problem" style={{ marginTop: 10, maxHeight: 160, borderRadius: 8 }} />}
+            {job.photo_url && <img src={assetUrl(job.photo_url)} alt="Problem" style={{ marginTop: 10, maxHeight: 160, borderRadius: 8 }} />}
             <hr className="divider" />
             <PriceBreakdown breakdown={job.price_breakdown} finalPrice={job.final_price} />
           </div>

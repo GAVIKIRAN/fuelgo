@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import Icon from '../../components/Icon'
+import { assetUrl } from '../../platform'
 import { TrackingMap } from '../../components/Maps'
 import StatusTimeline from '../../components/StatusTimeline'
 import { ErrorState, Field, Loading, Modal, PriceBreakdown, Spinner, StarRating, StatusBadge } from '../../components/ui'
@@ -171,7 +172,7 @@ export default function LiveTracking() {
               {request.description && <div className="receipt-row"><span>Problem</span><span>{request.description}</span></div>}
               {request.cancel_reason && <div className="receipt-row"><span>Cancel reason</span><span>{request.cancel_reason}</span></div>}
             </div>
-            {request.photo_url && <img src={request.photo_url} alt="Problem" style={{ marginTop: 10, borderRadius: 8, maxHeight: 180 }} />}
+            {request.photo_url && <img src={assetUrl(request.photo_url)} alt="Problem" style={{ marginTop: 10, borderRadius: 8, maxHeight: 180 }} />}
             <hr className="divider" />
             <PriceBreakdown breakdown={request.price_breakdown} finalPrice={request.final_price} />
             {request.payments?.length > 0 && (

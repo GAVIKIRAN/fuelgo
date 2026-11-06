@@ -7,6 +7,7 @@ import { ErrorState, Field, Loading, PageHeader, PriceBreakdown, Segmented, Spin
 import { paymentApi } from '../../api'
 import { errorMessage, fieldErrors } from '../../api/client'
 import { useLiveRequest } from '../../hooks/useLiveRequest'
+import { isNative, shareText } from '../../platform'
 import { money, serviceTitle } from '../../utils/format'
 
 function loadRazorpay() {
@@ -24,6 +25,18 @@ const formatCard = (v) => v.replace(/\D/g, '').slice(0, 19).replace(/(.{4})/g, '
 const formatExpiry = (v) => {
   const d = v.replace(/\D/g, '').slice(0, 4)
   return d.length > 2 ? `${d.slice(0, 2)}/${d.slice(2)}` : d
+}
+
+function receiptText(r) {
+  const p = r.payment
+  return [
+    `FuelGo receipt ${r.receipt_number}`,
+    `Amount: ${money(p.amount)} (${p.method}, ${p.status})`,
+    `Transaction: ${p.transaction_id}`,
+    `Service: ${serviceTitle(r.request)} (#${r.request.id})`,
+    `Provider: ${r.provider.name}`,
+    `Paid: ${p.paid_at ? new Date(p.paid_at).toLocaleString('en-IN') : '-'}`,
+  ].join('\n')
 }
 
 export default function Payment() {
@@ -63,7 +76,11 @@ export default function Payment() {
       <div style={{ maxWidth: 520, margin: '0 auto' }}>
         <div className="card"><Receipt receipt={receipt} /></div>
         <div className="btn-row no-print" style={{ marginTop: 16, justifyContent: 'center' }}>
-          <button className="btn btn-secondary" onClick={() => window.print()}><Icon name="printer" size={18} /> Print receipt</button>
+          {isNative ? (
+            <button className="btn btn-secondary" onClick={() => shareText('FuelGo receipt', receiptText(receipt)).catch(() => {})}><Icon name="upload" size={18} /> Share receipt</button>
+          ) : (
+            <button className="btn btn-secondary" onClick={() => window.print()}><Icon name="printer" size={18} /> Print receipt</button>
+          )}
           {!request.has_feedback && <Link className="btn btn-primary" to={`/app/requests/${id}/rate`}><Icon name="star" size={18} /> Rate service</Link>}
           <Link className="btn btn-ghost" to="/app">Home</Link>
         </div>

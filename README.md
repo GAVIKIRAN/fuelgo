@@ -11,6 +11,7 @@ FuelGo is a roadside-assistance platform that puts **emergency fuel delivery** a
 | Database | SQLite by default (zero setup) · PostgreSQL via `DATABASE_URL` |
 | ML | pandas, NumPy, scikit-learn (LinearRegression / RandomForest / GradientBoosting), joblib |
 | Payments | Pluggable gateway: offline **mock sandbox** (UPI / card / cash) or **Razorpay test mode** |
+| Mobile | Android app via Capacitor 8 (native GPS, notifications, back button, share sheet) |
 | Tests | pytest · Vitest + React Testing Library · Postman collection · end-to-end script |
 
 ---
@@ -78,6 +79,18 @@ The login page has one-tap buttons for these accounts.
 Open the user and the provider in two browser tabs (each tab keeps its own login), or use the **Simulate drive (demo)** button on the tracking screen. It moves the provider marker to the customer over about 30 seconds with live ETA updates, then marks the request *Arrived*.
 
 Suggested walkthrough: log in as **Ravi** → *Fuel* → 5 L petrol → *Choose a provider* → book. In a second tab, log in as the assigned provider (its business name is on Ravi's tracking screen; match it in the table above) → *Requests* → *Accept*. Back as Ravi → *Simulate drive*. As the provider → *Start service* → *Complete job*. As Ravi → *Pay now* → UPI `demo@okaxis` → *Rate service*. As **admin**, check the Dashboard, Requests and ML insights.
+
+---
+
+## Android app
+
+FuelGo also ships as an **Android app** (Capacitor 8, `in.fuelgo.app`). It is the same React app with native GPS, a hardware back button, system notifications, haptics, a share sheet, a splash screen and an adaptive icon, and all three roles work in it. Full guide: **[docs/ANDROID.md](docs/ANDROID.md)**.
+
+1. Run the backend on your Wi-Fi: `flask run --host 0.0.0.0` (allow Python through the firewall).
+2. Install `android-release/FuelGo-debug.apk` on your phone.
+3. On first launch, enter `http://<your-PC-IP>:5000` (find the IP with `ipconfig`) and sign in.
+
+Build it yourself (JDK 21 + Android SDK 36): `cd frontend && npm run android:build`.
 
 ---
 
@@ -197,6 +210,7 @@ fuelgo/
 - [ER diagram](docs/er-diagram.md)
 - [Use cases, lifecycle state diagram & sequence diagrams](docs/use-cases-and-flows.md)
 - [API reference](docs/api.md) (also Swagger UI at `/api/docs`)
+- [Android app](docs/ANDROID.md)
 - [Testing report](docs/TESTING.md)
 
 ## Screenshots

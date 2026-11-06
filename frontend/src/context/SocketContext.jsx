@@ -1,7 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { io } from 'socket.io-client'
 import toast from 'react-hot-toast'
-import { API_BASE, tokenStore } from '../api/client'
+import { apiBase, tokenStore } from '../api/client'
+import { systemNotify, vibrate } from '../platform'
 import { notificationApi } from '../api'
 import { useAuth } from './AuthContext'
 
@@ -30,7 +31,7 @@ export function SocketProvider({ children }) {
       return undefined
     }
     refreshUnread()
-    const socket = io(API_BASE || undefined, {
+    const socket = io(apiBase() || undefined, {
       path: '/socket.io',
       transports: ['websocket', 'polling'],
       auth: (cb) => cb({ token: tokenStore.get()?.access_token }),
@@ -44,6 +45,8 @@ export function SocketProvider({ children }) {
       setUnread((u) => u + 1)
       setLastNotification(n)
       toast(`${n.title}: ${n.message}`, { id: `n-${n.id}`, duration: 5000 })
+      systemNotify(n) // Android system notification when the app is in the background
+      vibrate()
     })
     // Fallback polling for the unread badge if the socket can't connect
     const timer = setInterval(() => {

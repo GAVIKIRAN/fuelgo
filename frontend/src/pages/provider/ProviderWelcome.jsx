@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import Icon from '../../components/Icon'
+import { getPosition } from '../../platform'
 import { Badge, Loading, Spinner } from '../../components/ui'
 import { providerApi } from '../../api'
 import { errorMessage } from '../../api/client'
@@ -18,10 +19,7 @@ function Step({ n, done, title, children }) {
 }
 
 function position() {
-  return new Promise((resolve) => {
-    if (!('geolocation' in navigator)) return resolve({})
-    navigator.geolocation.getCurrentPosition((p) => resolve({ lat: p.coords.latitude, lng: p.coords.longitude }), () => resolve({}), { timeout: 8000 })
-  })
+  return getPosition({ timeout: 8000 }).catch(() => ({}))
 }
 
 export default function ProviderWelcome() {

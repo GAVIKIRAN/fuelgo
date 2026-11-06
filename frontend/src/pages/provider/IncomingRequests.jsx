@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import Icon from '../../components/Icon'
+import { assetUrl } from '../../platform'
 import { TrackingMap } from '../../components/Maps'
 import { EmptyState, ErrorState, Field, Loading, Modal, PageHeader, Spinner } from '../../components/ui'
 import { providerApi } from '../../api'
@@ -88,7 +89,7 @@ export default function IncomingRequests() {
                     {r.vehicle && <div className="receipt-row"><span>Vehicle</span><span>{r.vehicle.make} {r.vehicle.model} · {r.vehicle.registration_number}</span></div>}
                     {r.description && <div className="receipt-row"><span>Problem</span><span>{r.description}</span></div>}
                   </div>
-                  {r.photo_url && <img src={r.photo_url} alt="Problem" style={{ marginTop: 10, maxHeight: 140, borderRadius: 8 }} />}
+                  {r.photo_url && <img src={assetUrl(r.photo_url)} alt="Problem" style={{ marginTop: 10, maxHeight: 140, borderRadius: 8 }} />}
                   <div className="btn-row" style={{ marginTop: 16 }}>
                     <button className="btn btn-success btn-lg" disabled={busy === r.id} onClick={() => accept(r)}>
                       {busy === r.id ? <Spinner size={18} /> : <><Icon name="check" /> Accept</>}

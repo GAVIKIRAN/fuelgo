@@ -49,7 +49,9 @@ class Config:
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=14)
 
     CORS_ORIGINS = [o.strip() for o in os.getenv(
-        "CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(",") if o.strip()]
+        "CORS_ORIGINS",
+        # web dev server + the Android app (Capacitor WebView origins)
+        "http://localhost:5173,http://127.0.0.1:5173,http://localhost,https://localhost,capacitor://localhost").split(",") if o.strip()]
 
     # Socket.IO authenticates with a JWT (not cookies); dev accepts any origin so the
     # UI also works when opened via a LAN IP on a phone. Production uses CORS_ORIGINS.
