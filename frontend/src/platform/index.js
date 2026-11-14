@@ -73,9 +73,13 @@ function webError(err) {
   return new Error({ 1: GEO_MESSAGES.denied, 2: GEO_MESSAGES.unavailable, 3: GEO_MESSAGES.timeout }[err?.code] || 'Could not get your location.')
 }
 
+// NOTE: Capacitor plugins are Proxies that forward *any* property to native code, so a
+// plugin must never be returned from an async function or promise directly: JS would
+// treat it as a thenable and call `.then()` on it ("Geolocation.then() is not
+// implemented on android"). Always wrap it in an object.
 async function nativeGeo() {
   const { Geolocation } = await import('@capacitor/geolocation')
-  return Geolocation
+  return { Geolocation }
 }
 
 async function ensureNativePermission(Geolocation) {
@@ -87,7 +91,7 @@ async function ensureNativePermission(Geolocation) {
 /** One-shot position: {lat, lng, accuracy}. Rejects with a user-friendly Error. */
 export async function getPosition({ timeout = 10000 } = {}) {
   if (isNative) {
-    const Geolocation = await nativeGeo()
+    const { Geolocation } = await nativeGeo()
     await ensureNativePermission(Geolocation)
     try {
       const p = await Geolocation.getCurrentPosition({ enableHighAccuracy: true, timeout, maximumAge: 30000 })
@@ -111,7 +115,7 @@ export function watchPosition(onPosition, onError) {
   let stopped = false
   let stop = () => {}
   if (isNative) {
-    nativeGeo().then(async (Geolocation) => {
+    nativeGeo().then(async ({ Geolocation }) => {
       try {
         await ensureNativePermission(Geolocation)
         if (stopped) return
@@ -153,7 +157,7 @@ export async function initNativeShell({ onBack } = {}) {
   document.documentElement.classList.add('native')
   try {
     await StatusBar.setStyle({ style: Style.Dark })
-    await StatusBar.setBackgroundColor({ color: '#0f1f3d' })
+    await StatusBar.setBackgroundColor({ color: '#100F0D' })
   } catch {
     /* not supported on every Android version */
   }

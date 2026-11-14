@@ -85,7 +85,7 @@ export default function Register() {
           <h1 style={{ fontSize: '2.2rem' }}>{isProvider ? 'Earn with FuelGo.' : 'Never get stranded again.'}</h1>
           <p>{isProvider ? 'Join as a fuel delivery agent or mechanic. Get verified, go online, and take nearby jobs.' : 'Save your vehicles once, then get fuel or a mechanic in a couple of taps.'}</p>
         </div>
-        <p className="small">Already have an account? <Link to="/login" style={{ color: '#fbbf24' }}>Log in</Link></p>
+        <p className="small">Already have an account? <Link to="/login" style={{ color: '#E68232' }}>Log in</Link></p>
       </aside>
       <main className="auth-main">
         <div className="auth-card" style={{ maxWidth: 520 }}>

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import Icon from '../../components/Icon'
+import { Gauge, PillBars } from '../../components/Charts'
 import { getPosition } from '../../platform'
 import { Loading, StatCard, StatusBadge } from '../../components/ui'
 import { providerApi } from '../../api'
@@ -98,32 +99,48 @@ export default function ProviderDashboard() {
         </div>
       )}
 
-      <div className="grid grid-4">
-        <StatCard label="Today" value={money(e?.today)} icon="wallet" tone="amber" />
-        <StatCard label="This week" value={money(e?.this_week)} icon="chart" tone="navy" />
-        <StatCard label="Completed jobs" value={e?.completed_jobs ?? '—'} icon="check" tone="green" />
-        <StatCard label="Rating" value={p.rating_count ? `${p.rating_avg.toFixed(1)} / 5` : 'New'} hint={`${p.rating_count} reviews`} icon="star" />
-      </div>
+      <div className="dash-grid">
+        <div className="col-3 half-sm"><StatCard featured label="Today" num={e?.today} format={money} hint="Net of commission" to="/provider/earnings" /></div>
+        <div className="col-3 half-sm"><StatCard label="This week" num={e?.this_week} format={money} hint="Last 7 days" icon="chart" /></div>
+        <div className="col-3 half-sm"><StatCard label="Completed jobs" num={e?.completed_jobs} hint="All time" icon="check" /></div>
+        <div className="col-3 half-sm"><StatCard label="Rating" value={p.rating_count ? `${p.rating_avg.toFixed(1)} / 5` : 'New'} hint={`${p.rating_count} reviews`} icon="star" /></div>
 
-      <div className="card">
-        <div className="card-head">
-          <h2>Incoming requests</h2>
-          <Link to="/provider/requests" className="link-btn">View all</Link>
+        <div className="card dash-card col-5">
+          <div className="card-head"><h2>Earnings, last 7 days</h2><Link to="/provider/earnings" className="pill-link">Details</Link></div>
+          {e?.daily ? (
+            <PillBars format={money} data={e.daily.map((x) => {
+              const day = new Date(x.date)
+              return { value: x.earnings, label: day.toLocaleDateString('en-IN', { weekday: 'short' }).slice(0, 1), full: day.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }) }
+            })} />
+          ) : <Loading />}
         </div>
-        {incoming.data?.items.length ? (
-          <div className="list">
-            {incoming.data.items.slice(0, 3).map((r) => (
-              <Link to="/provider/requests" key={r.id} className="list-item">
-                <span className={`li-icon ${r.service_type === 'fuel' ? 'fuel' : ''}`}><Icon name={r.service_type === 'fuel' ? 'fuel' : 'wrench'} /></span>
-                <div className="li-main">
-                  <div className="li-title">{serviceTitle(r)}</div>
-                  <div className="li-sub">{km(r.distance_km)} away · {r.address || r.zone} · {timeAgo(r.created_at)}</div>
-                </div>
-                <strong>{money(r.estimated_price)}</strong>
-              </Link>
-            ))}
+
+        <div className="card dash-card col-4">
+          <div className="card-head">
+            <h2>Incoming requests</h2>
+            <Link to="/provider/requests" className="pill-link">View all</Link>
           </div>
-        ) : <p className="muted" style={{ margin: 0 }}>{p.is_available ? 'No pending requests. New ones appear here instantly.' : 'Go online to receive requests.'}</p>}
+          {incoming.data?.items.length ? (
+            <div className="list">
+              {incoming.data.items.slice(0, 3).map((r) => (
+                <Link to="/provider/requests" key={r.id} className="list-item">
+                  <span className={`li-icon ${r.service_type === 'fuel' ? 'fuel' : ''}`}><Icon name={r.service_type === 'fuel' ? 'fuel' : 'wrench'} /></span>
+                  <div className="li-main">
+                    <div className="li-title">{serviceTitle(r)}</div>
+                    <div className="li-sub">{km(r.distance_km)} away · {r.address || r.zone} · {timeAgo(r.created_at)}</div>
+                  </div>
+                  <strong>{money(r.estimated_price)}</strong>
+                </Link>
+              ))}
+            </div>
+          ) : <p className="muted" style={{ margin: 0 }}>{p.is_available ? 'No pending requests. New ones appear here instantly.' : 'Go online to receive requests.'}</p>}
+        </div>
+
+        <div className="card dash-card col-3">
+          <div className="card-head"><h2>Customer rating</h2></div>
+          <Gauge value={p.rating_count ? p.rating_avg / 5 : 0} label={p.rating_count ? `${p.rating_avg.toFixed(1)} of 5 stars` : 'no reviews yet'} />
+          <div className="legend"><span><i style={{ '--c': 'var(--ember)' }} /> {p.rating_count} reviews</span></div>
+        </div>
       </div>
     </div>
   )

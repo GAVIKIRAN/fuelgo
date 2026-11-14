@@ -38,6 +38,8 @@ const PATHS = {
   play: 'M6 4l14 8-14 8z',
   power: 'M18.4 6.6a9 9 0 1 1-12.8 0M12 2v10',
   printer: 'M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z',
+  arrowUpRight: 'M7 17L17 7M8 7h9v9',
+  arrowRight: 'M5 12h14M13 6l6 6-6 6',
   chevronRight: 'M9 18l6-6-6-6',
   chevronLeft: 'M15 18l-6-6 6-6',
 }

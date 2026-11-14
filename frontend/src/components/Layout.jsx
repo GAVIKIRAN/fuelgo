@@ -51,14 +51,22 @@ export function ThemeToggle() {
   )
 }
 
+const PROMO = {
+  user: { title: 'Stranded on the road?', text: 'Fuel or a mechanic, sent to your spot.', to: '/app/fuel', cta: 'Order fuel' },
+  provider: { title: 'Ready for the next job?', text: 'New requests reach you instantly.', to: '/provider/requests', cta: 'View requests' },
+  admin: { title: 'Demand forecast', text: 'See where fuel will be needed next.', to: '/admin/ml', cta: 'Open ML insights' },
+}
+
 export default function Layout() {
   const { user, logout } = useAuth()
   const { connected } = useSocket()
+  const { theme, toggle } = useTheme()
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
   const items = NAV[user.role] || []
   const home = items[0]?.to || '/'
+  const promo = PROMO[user.role]
 
   useEffect(() => setMenuOpen(false), [location.pathname])
 
@@ -69,45 +77,64 @@ export default function Layout() {
 
   return (
     <div className={`shell role-${user.role}`}>
-      <header className="topbar">
-        <div className="topbar-left">
-          {user.role === 'admin' && (
-            <button className="icon-btn only-mobile" onClick={() => setMenuOpen((o) => !o)} aria-label="Menu">
-              <Icon name="menu" />
-            </button>
-          )}
-          <Logo to={home} />
-          {user.role !== 'user' && <span className="role-chip">{user.role === 'admin' ? 'Admin' : 'Partner'}</span>}
-        </div>
-        <nav className="topnav only-desktop" aria-label="Main">
-          {user.role !== 'admin' && items.map((i) => (
-            <NavLink key={i.to} to={i.to} end={i.end}>{i.label}</NavLink>
-          ))}
-        </nav>
-        <div className="topbar-right">
-          <span className={`live-dot ${connected ? 'on' : ''}`} title={connected ? 'Live updates connected' : 'Reconnecting…'} />
-          <NotificationBell />
-          <ThemeToggle />
-          <div className="user-chip only-desktop">
-            <span className="avatar">{user.name?.[0]?.toUpperCase()}</span>
-            <span>{user.name.split(' ')[0]}</span>
+      <aside className={`sidebar ${menuOpen ? 'open' : ''}`} aria-label="Main navigation">
+        <Logo to={home} />
+        <span className="side-label">Menu</span>
+        {items.map((i) => (
+          <NavLink key={i.to} to={i.to} end={i.end} className={({ isActive }) => `side-link ${isActive ? 'active' : ''}`}>
+            <Icon name={i.icon} size={19} /> {i.label}
+          </NavLink>
+        ))}
+        <span className="side-label">General</span>
+        <button type="button" className="side-link" onClick={toggle}>
+          <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={19} /> {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+        </button>
+        <button type="button" className="side-link" onClick={doLogout}>
+          <Icon name="logout" size={19} /> Log out
+        </button>
+        {promo && (
+          <div className="side-promo">
+            <strong>{promo.title}</strong>
+            <span>{promo.text}</span>
+            <Link to={promo.to} className="btn btn-primary btn-sm">{promo.cta}</Link>
           </div>
-          <button className="icon-btn" onClick={doLogout} aria-label="Log out"><Icon name="logout" /></button>
-        </div>
-      </header>
-
-      <div className="shell-body">
-        {user.role === 'admin' && (
-          <aside className={`sidebar ${menuOpen ? 'open' : ''}`} aria-label="Admin navigation">
-            {items.map((i) => (
-              <NavLink key={i.to} to={i.to} end={i.end}>
-                <Icon name={i.icon} size={18} /> {i.label}
-              </NavLink>
-            ))}
-          </aside>
         )}
+      </aside>
+
+      <div className="shell-main">
+        <header className="topbar">
+          <div className="topbar-left">
+            {user.role === 'admin' && (
+              <button className="icon-btn only-mobile" onClick={() => setMenuOpen((o) => !o)} aria-label="Menu" aria-expanded={menuOpen}>
+                <Icon name={menuOpen ? 'x' : 'menu'} />
+              </button>
+            )}
+            <span className="only-mobile"><Logo to={home} /></span>
+            <span className="live-pill only-desktop">
+              <span className={`live-dot ${connected ? 'on' : ''}`} />
+              {connected ? 'Live updates on' : 'Reconnecting…'}
+            </span>
+            {user.role !== 'user' && <span className="role-chip">{user.role === 'admin' ? 'Admin' : 'Partner'}</span>}
+          </div>
+          <div className="topbar-right">
+            <span className={`live-dot only-mobile ${connected ? 'on' : ''}`} title={connected ? 'Live updates connected' : 'Reconnecting…'} />
+            <NotificationBell />
+            <span className="only-mobile"><ThemeToggle /></span>
+            <div className="user-chip only-desktop">
+              <span className="avatar">{user.name?.[0]?.toUpperCase()}</span>
+              <div>
+                <strong>{user.name}</strong>
+                {user.email && <small>{user.email}</small>}
+              </div>
+            </div>
+            <button className="icon-btn only-mobile" onClick={doLogout} aria-label="Log out"><Icon name="logout" /></button>
+          </div>
+        </header>
+
         <main className="content" id="main">
-          <Outlet />
+          <div className="page-anim" key={location.pathname}>
+            <Outlet />
+          </div>
         </main>
       </div>
 

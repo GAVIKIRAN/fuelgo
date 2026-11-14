@@ -9,6 +9,8 @@ import { SocketProvider } from './context/SocketContext'
 import ServerSetup from './pages/ServerSetup'
 import { initNativeShell, needsServerSetup } from './platform'
 import './styles/index.css'
+import './styles/app.css'
+import './styles/landing.css'
 
 initNativeShell()
 
@@ -30,7 +32,7 @@ function Root() {
         position="top-center"
         toastOptions={{
           style: { background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', fontWeight: 500 },
-          success: { iconTheme: { primary: '#16a34a', secondary: '#fff' } },
+          success: { iconTheme: { primary: '#2f7d4f', secondary: '#fff' } },
         }}
       />
     </ThemeProvider>

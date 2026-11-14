@@ -13,10 +13,20 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
+        <!-- Capacitor 8 draws edge-to-edge with transparent system bars, so the window
+             background is what shows behind the status/navigation bars: make it navy. -->
+        <item name="android:windowBackground">@color/fuelgoNavy</item>
+        <!-- FuelGo navy status/navigation bars with light icons (pre-edge-to-edge devices) -->
+        <item name="android:statusBarColor">@color/fuelgoNavy</item>
+        <item name="android:navigationBarColor">@color/fuelgoNavy</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
 
     <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
         <item name="android:background">@drawable/splash</item>
+        <item name="postSplashScreenTheme">@style/AppTheme.NoActionBar</item>
+        <item name="android:statusBarColor">@color/fuelgoNavy</item>
+        <item name="android:navigationBarColor">@color/fuelgoNavy</item>
     </style>
 </resources>

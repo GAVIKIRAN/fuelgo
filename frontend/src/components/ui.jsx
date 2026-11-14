@@ -1,4 +1,5 @@
-import { useEffect, useId, useRef } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Icon from './Icon'
 import { STATUS_LABELS, money } from '../utils/format'
 
@@ -45,14 +46,59 @@ export function Badge({ tone = 'neutral', children }) {
   return <span className={`badge tone-${tone}`}>{children}</span>
 }
 
-export function StatCard({ label, value, hint, icon, tone }) {
+const motionOff = () =>
+  typeof IntersectionObserver === 'undefined' ||
+  typeof requestAnimationFrame === 'undefined' ||
+  !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+
+/** Counts up to `value` the first time it scrolls into view (and between live updates). */
+export function CountUp({ value, format = (n) => n.toLocaleString('en-IN'), duration = 900 }) {
+  const valid = typeof value === 'number' && Number.isFinite(value)
+  const [shown, setShown] = useState(() => (valid && !motionOff() ? 0 : value))
+  const ref = useRef(null)
+  const from = useRef(0)
+  useEffect(() => {
+    if (!valid) return undefined
+    if (motionOff() || !ref.current) {
+      setShown(value)
+      return undefined
+    }
+    let raf
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return
+      io.disconnect()
+      const start = from.current
+      const t0 = performance.now()
+      const tick = (t) => {
+        const p = Math.min(1, (t - t0) / duration)
+        const v = start + (value - start) * (1 - (1 - p) ** 3)
+        from.current = v
+        setShown(p < 1 ? v : value)
+        if (p < 1) raf = requestAnimationFrame(tick)
+      }
+      raf = requestAnimationFrame(tick)
+    })
+    io.observe(ref.current)
+    return () => {
+      io.disconnect()
+      cancelAnimationFrame(raf)
+    }
+  }, [value, valid, duration])
+  if (!valid) return <span ref={ref}>—</span>
+  const n = typeof shown === 'number' ? shown : value
+  return <span ref={ref}>{format(n === value ? value : Number(n.toFixed(Number.isInteger(value) ? 0 : 1)))}</span>
+}
+
+/** `num` (+ optional `format`) animates the figure; `value` shows it as-is. `to` makes the corner chip a link. */
+export function StatCard({ label, value, num, format, hint, icon, tone, featured = false, to }) {
+  const chip = <Icon name={to ? 'arrowUpRight' : icon} size={16} />
   return (
-    <div className={`stat-card ${tone ? `tone-${tone}` : ''}`}>
+    <div className={`stat-card ${featured ? 'featured' : ''} ${tone === 'red' ? 'alert-tone' : ''}`}>
       <div className="stat-top">
         <span className="stat-label">{label}</span>
-        {icon && <span className="stat-icon"><Icon name={icon} size={18} /></span>}
+        {to ? <Link to={to} className="stat-icon" aria-label={`Open ${label}`}>{chip}</Link> : icon && <span className="stat-icon">{chip}</span>}
       </div>
-      <div className="stat-value">{value}</div>
+      <div className="stat-value">{num !== undefined ? <CountUp value={num} format={format} /> : value}</div>
       {hint && <div className="stat-hint">{hint}</div>}
     </div>
   )

@@ -35,7 +35,7 @@ export default function Earnings() {
               <XAxis dataKey="label" tick={{ fill: 'var(--text-2)', fontSize: 12 }} />
               <YAxis tick={{ fill: 'var(--text-2)', fontSize: 12 }} />
               <Tooltip formatter={(v, n) => (n === 'earnings' ? money(v) : v)} contentStyle={{ background: 'var(--surface)', border: '1px solid var(--border)' }} />
-              <Bar dataKey="earnings" fill="#f59e0b" radius={[6, 6, 0, 0]} name="earnings" />
+              <Bar dataKey="earnings" fill="#E68232" radius={[14, 14, 14, 14]} name="earnings" />
             </BarChart>
           </ResponsiveContainer>
         </div>

@@ -100,9 +100,9 @@ export default function AdminML() {
               <YAxis tick={axis} unit=" L" width={70} />
               <Tooltip contentStyle={tooltipStyle} formatter={(v) => `${v.toLocaleString()} L`} labelFormatter={(l, p) => p?.[0]?.payload?.date || l} />
               <Legend />
-              <Bar dataKey="petrol" stackId="f" fill="#f59e0b" name="Petrol" />
-              <Bar dataKey="diesel" stackId="f" fill="#24407a" name="Diesel" />
-              <Bar dataKey="cng" stackId="f" fill="#16a34a" name="CNG" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="petrol" stackId="f" fill="#E68232" name="Petrol" />
+              <Bar dataKey="diesel" stackId="f" fill="#67070B" name="Diesel" />
+              <Bar dataKey="cng" stackId="f" fill="#C72A17" name="CNG" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -120,8 +120,8 @@ export default function AdminML() {
                 <YAxis allowDecimals={false} tick={axis} />
                 <Tooltip contentStyle={tooltipStyle} />
                 <Legend />
-                <Bar dataKey="fuel" stackId="h" fill="#f59e0b" name="Fuel" />
-                <Bar dataKey="mechanic" stackId="h" fill="#24407a" name="Mechanic" />
+                <Bar dataKey="fuel" stackId="h" fill="#E68232" name="Fuel" />
+                <Bar dataKey="mechanic" stackId="h" fill="#67070B" name="Mechanic" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -197,7 +197,7 @@ export default function AdminML() {
                   <XAxis dataKey="label" tick={axis} interval={2} />
                   <YAxis tick={axis} unit=" L" width={60} />
                   <Tooltip contentStyle={tooltipStyle} formatter={(v) => `${v} L`} />
-                  <Line type="monotone" dataKey="demand_litres" stroke="#f59e0b" strokeWidth={2.5} dot={false} name="Demand" />
+                  <Line type="monotone" dataKey="demand_litres" stroke="#E68232" strokeWidth={2.5} dot={false} name="Demand" />
                 </LineChart>
               </ResponsiveContainer>
             </div>

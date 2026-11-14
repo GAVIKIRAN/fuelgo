@@ -113,7 +113,7 @@ export function TrackingMap({ provider, destination, height = 360, providerLabel
             </Marker>
             <Polyline
               positions={[[provider.lat, provider.lng], [destination.lat, destination.lng]]}
-              pathOptions={{ color: '#f59e0b', weight: 4, dashArray: '8 8' }}
+              pathOptions={{ color: '#E68232', weight: 4, dashArray: '8 8' }}
             />
           </>
         )}

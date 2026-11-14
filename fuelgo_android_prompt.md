@@ -1,0 +1,71 @@
+# FuelGo Android App: Claude Code Prompt
+
+## Where to put it
+Use the SAME repository, in a NEW sub-folder. Do not make a separate project.
+
+```
+fuelgo/
+  backend/    (Flask API, already built, shared by web and mobile)
+  frontend/   (React web app)
+  mobile/     (NEW: Android app, Expo React Native)
+  docs/
+  README.md
+```
+Run Claude Code from the `fuelgo/` root so it can read the existing backend API, models and docs. Put the concept UI image in `fuelgo/docs/design/concept-ui.png` before starting.
+
+---
+
+## Prompt (paste into Claude Code)
+
+```
+Build the FuelGo Android app inside the existing monorepo, in a new folder `mobile/`. It must reuse the existing Flask backend in `backend/` (do not duplicate backend logic). First read backend/ routes, models and docs/ so the app matches the real API, auth and request lifecycle. If the backend lacks something the app needs, add it to backend/ in a backwards-compatible way and keep the web frontend working.
+
+## Stack
+- Expo (React Native) with TypeScript, Expo Router, React Query (TanStack), Axios, Zustand (or Context) for auth state, expo-secure-store for JWT, expo-location for GPS, react-native-maps or react-native-maps with OpenStreetMap tiles (UrlTile) so no Google key is required, socket.io-client for live tracking, expo-notifications for push/local notifications, react-native-reanimated + moti for animation, expo-image-picker for problem photos.
+- API base URL from `EXPO_PUBLIC_API_URL` (.env, with .env.example). Must work against the backend running on the dev machine (document using the LAN IP, and 10.0.2.2 for the Android emulator).
+- Target Android first (min SDK per Expo defaults); keep code iOS-compatible.
+
+## Design: follow the concept UI at docs/design/concept-ui.png
+Visual language to reproduce:
+- Colours: bold red (#D32F2F to #C62828) hero banner, vivid yellow (#FFD60A) for primary buttons and the bottom nav pill, soft peach/cream (#FDECEA / #FFE8CC) screen and card backgrounds, lavender (#E6E6FA) for the diesel card, near-black (#111) text and pill badges, white cards.
+- Rounded everything (cards radius about 24, buttons and nav fully rounded), soft shadows, friendly geometric sans font (e.g. Poppins or Outfit via expo-font).
+- 3D-style illustrated fuel pumps (orange for petrol, blue for diesel), a red jerry can, and a tanker truck. Use image assets in mobile/assets/ (generate simple placeholders now, and make them easy to swap for my generated 3D images).
+- Floating yellow pill bottom navigation with an active "Home" chip and icons (Home, Fuel, Wallet/Payments, Stats/History).
+
+Screens (match the concept layouts):
+1. Splash + Onboarding (3 slides) + Login / Register (user or provider), animated.
+2. Home: location header with address and avatar; red promo banner ("Get your first delivery with Zero Delivery Charges", truck image, "Order Now"); two fuel cards (Petrol, Diesel with price per litre and Order badge); "Order History" list with "View all" (container icon by quantity, fuel name, date, amount); an SOS "Request Help" shortcut and a "Mechanic" entry card, because FuelGo also offers mechanic assistance.
+3. Fuel order screen: big fuel header with price per litre and 3D pump, quantity selector (a horizontal slider 5-50 L with a droplet-shaped thumb, jerry can icon and live "10 Liters" label), date chips (next 3 days), delivery time-slot grid, sticky footer with "Total Value" and a yellow "Proceed to Checkout" button. Price = litres x live fuel price + delivery fee (zero for first order).
+4. Mechanic request: service category chips (flat tyre, battery, engine, towing, general), problem description, optional photo, location pin on map.
+5. Location picker: GPS auto-detect with a draggable pin, address search, permission-denied fallback to manual address.
+6. Provider matching: list and map of nearby verified providers with distance, rating, ETA and price; choose one or auto-assign.
+7. Checkout and Payment: summary, payment method (UPI, card, cash on delivery) through the existing mock payment endpoint, success animation and receipt.
+8. Live Tracking: map with provider marker moving in real time (Socket.IO), ETA, status stepper (Accepted, En route, Arrived, In progress, Completed), call and chat-style contact button, cancel option.
+9. Rating and Feedback after completion, and a complaint option.
+10. Order History and detail, Wallet/Payments, Profile, Vehicles (add, edit, delete), Notifications.
+11. Provider mode (same app, role-based tabs): availability toggle, incoming requests with accept/reject, customer location and navigate button (open Google Maps intent), status updates, earnings summary. Provider app must stream location updates while on a job.
+
+## Engineering requirements
+- Role-based navigation (user vs provider) from the JWT role. Auth guard, token refresh/logout handling, offline and error states, loading skeletons, pull-to-refresh, form validation, accessibility labels, large tap targets.
+- Typed API client generated by hand from the backend routes (one module per resource), React Query hooks per endpoint, and a mock/demo mode flag (`EXPO_PUBLIC_DEMO=true`) that works without a backend using local fixtures.
+- Animations: staggered entrance on Home, press-scale on buttons, animated slider thumb, success checkmark, moving truck on the promo banner, smooth map marker interpolation. Respect reduced-motion.
+- Currency in INR (₹), dates in en-IN format.
+- Tests: Jest + React Native Testing Library for the price calculator, auth store and the order screen; lint and typecheck must pass.
+- Build: configure `app.json` and `eas.json` with package name `com.fuelgo.app`, app icon and splash. Produce an installable APK via `eas build -p android --profile preview` (document it) and also document running with Expo Go and on an Android emulator.
+
+## Process
+1. Read backend and docs, then write mobile/PLAN.md (screens, navigation tree, API mapping).
+2. Scaffold, theme and design system (colors, typography, shared components: Button, Card, Chip, PillNav, Slider, Badge).
+3. Implement screens in the order above, running the app (`npx expo start`) and typechecking after each group.
+4. Run the full user flow against the real backend: register, add vehicle, order 10 L petrol, match provider, track, pay, rate. Then a provider flow: accept, update status, complete. Fix everything that fails.
+5. Update the root README with a "Mobile app" section (setup, env, run, build APK) and add the mobile endpoints to the Postman collection if any were added.
+6. Commit in logical steps. Finish with a summary of what works and known limitations.
+```
+
+---
+
+## Why Expo React Native (and not the alternatives)
+- Your web app is already React, so components, API logic and thinking carry over.
+- One command (`npx expo start`) runs it on your phone with Expo Go; no Android Studio needed to start.
+- It builds a real installable APK for the project demo.
+- Alternative if you are short on time: wrap the existing web app with Capacitor (same code, fastest, but feels less native). Ask Claude Code for that instead if the deadline is near.
